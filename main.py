@@ -92,17 +92,14 @@ while running:
                     if "answer" in current_node:
                         guessed = True
                         guess = current_node["answer"]
-
-    # Display the current question
-    question_text = font.render(current_node["question"], True, BLACK)
-    screen.blit(question_text, (200, 200))
-    pygame.display.update()
-
-    # Display the guess if reached
+   
     if guessed:
-        guess_text = font.render(
-            "Is your character " + guess + "?", True, BLACK)
-        # screen.blit(guess_text, (100, 200))
+        text = font.render("I guess it's " + guess + "!", True, BLACK)
+    else:
+        text = font.render(current_node["question"], True, BLACK)
+
+    text_rect2 = text.get_rect(center=(width // 2, height // 2))
+    screen.blit(text, text_rect2)
 
     pygame.display.update()
 
@@ -137,9 +134,6 @@ while running:
 
     # Draw the text on the screen
     screen.blit(text_surface, text_rect)
-
-    # Update the display
-    pygame.display.update()
 
 # Quit Pygame
 pygame.quit()
