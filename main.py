@@ -58,20 +58,34 @@ WHITE = (255, 255, 255)
 # Load custom font
 font = pygame.font.Font(None, 64)
 
-# Render the text
-text_surface = font.render("Akinator", True, color_font)
+# Render the title text
+title_text_surface = font.render("Akinator", True, color_font)
 
-# Calculate the text position
-text_rect = text_surface.get_rect()
-text_rect.center = (width // 2, height // 6)
+# Calculate the title text position
+title_text_rect = title_text_surface.get_rect()
+title_text_rect.center = (width // 2, height // 6)
 
 # Define dimensions for the text box
-box_width = text_rect.width + 40
-box_height = text_rect.height + 40
+box_width = title_text_rect.width + 40
+box_height = title_text_rect.height + 40
 
 # Calculate the position of the text box
 box_x = (width - box_width) // 2
 box_y = (height // 6) - (box_height // 2)
+
+
+# Define dimensions for the buttons
+button_width = 150
+button_height = 60
+button_spacing = 240
+
+
+# Calculate the position of the "Yes" and "No" buttons
+yes_button_x = (width - button_width - button_spacing) // 2
+no_button_x = (width + button_spacing) // 2 - button_width
+button_y = height - (button_height + 40)
+
+
 
 running = True
 while running:
@@ -92,6 +106,8 @@ while running:
                     if "answer" in current_node:
                         guessed = True
                         guess = current_node["answer"]
+                        
+
    
     if guessed:
         text = font.render("I guess it's " + guess + "!", True, BLACK)
@@ -119,7 +135,7 @@ while running:
         pygame.draw.rect(screen, color, pygame.Rect(0, y, width, 1))
 
     # Check if the mouse is over the text
-    if text_rect.collidepoint(pygame.mouse.get_pos()):
+    if title_text_rect.collidepoint(pygame.mouse.get_pos()):
 
         # Change the font color to the hover color
         text_surface = font.render("Akinator", True, color_hover)
@@ -131,9 +147,41 @@ while running:
     box_rect = pygame.Rect(box_x, box_y, box_width, box_height)
     pygame.draw.rect(screen, color_border, box_rect)
     pygame.draw.rect(screen, color_bg, box_rect.inflate(-10, -10))
+    
+    # Draw the "Yes" button
+    yes_button_rect = pygame.Rect(yes_button_x, button_y, button_width, button_height)
+    pygame.draw.rect(screen, BLACK, yes_button_rect, 2)
+    pygame.draw.rect(screen, WHITE, yes_button_rect.inflate(-10, -10))
+    yes_text = font.render("Yes", True, BLACK)
+    yes_text_rect = yes_text.get_rect(center=yes_button_rect.center)
+    screen.blit(yes_text, yes_text_rect)
+    
+    # Draw the "No" button
+    no_button_rect = pygame.Rect(no_button_x, button_y, button_width, button_height)
+    pygame.draw.rect(screen, BLACK, no_button_rect, 2)
+    pygame.draw.rect(screen, WHITE, no_button_rect.inflate(-10, -10))
+    no_text = font.render("No", True, BLACK)
+    no_text_rect = no_text.get_rect(center=no_button_rect.center)
+    screen.blit(no_text, no_text_rect)
+    
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.button == 1:
+            mouse_pos = pygame.mouse.get_pos()
+            if yes_button_rect.collidepoint(mouse_pos):
+                if "yes" in current_node:
+                    current_node = current_node["yes"]
+                    if "answer" in current_node:
+                        guessed = True
+                        guess = current_node["answer"]
+            elif no_button_rect.collidepoint(mouse_pos):
+                if "no" in current_node:
+                    current_node = current_node["no"]
+                    if "answer" in current_node:
+                        guessed = True
+                        guess = current_node["answer"]
 
     # Draw the text on the screen
-    screen.blit(text_surface, text_rect)
+    screen.blit(text_surface, title_text_rect)
 
 # Quit Pygame
 pygame.quit()
