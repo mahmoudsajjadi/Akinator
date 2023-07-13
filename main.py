@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jul 12 16:02:04 2023
+
+@author: seyedmahmouds
+"""
+
 import pygame
 from pygame.locals import *
 import pygame.font
@@ -56,7 +63,8 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # Load custom font
-font = pygame.font.Font(None, 64)
+font_path = "./utils/Bangers-Regular.ttf"
+font = pygame.font.Font(font_path, 64)
 
 # Render the title text
 title_text_surface = font.render("Akinator", True, color_font)
